@@ -18,7 +18,7 @@ for _, row in df.iterrows():
     output_path = f"images/{sample_id}/flipbook_metadata.json"
     with open(output_path, "wt") as f:
         flipbook_metadata = {
-            "Locus": "<span style='color: #1133FF'><b>" + row["Locus"] + "</b></span>",
+            "Locus": "<span style='color: #1133FF; white-space:nowrap'><b>" + row["Locus"] + "</b></span>",
         }
         for key in "Sex", "PCR_verdict", "EH_verdict":
             if row[key]:
@@ -32,7 +32,7 @@ for _, row in df.iterrows():
         flipbook_metadata["NumAnalystsMatchedPcr"] = sum([1 if row[f"Analyst{i}"] == row["PCR_verdict"] else 0 for i in range(1, NUM_ANALYSTS + 1)])
 
         if not math.isnan(row["Premutation"]):
-            flipbook_metadata["Premutation_(&GreaterEqual;)"] = int(row["Premutation"]) + 1
+            flipbook_metadata["Premutation_(&gt;)"] = int(row["Premutation"])
         if not math.isnan(row["Pathogenic"]):
             flipbook_metadata["Pathogenic_(&GreaterEqual;)"] = int(row["Pathogenic"])
 
