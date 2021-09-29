@@ -28,7 +28,8 @@ for _, row in df.iterrows():
 
         analyst_response_counter = collections.Counter([row[f"Analyst{i}"] for i in range(1, NUM_ANALYSTS + 1)])
         analyst_response_counter_sorted = sorted(analyst_response_counter.items(),  key=lambda t: -t[1])
-        flipbook_metadata["MostCommonAnalystResponse"] = analyst_response_counter_sorted[0][0]
+        most_common_analyst_response = analyst_response_counter_sorted[0][0]
+        flipbook_metadata["MostCommonAnalystResponse"] = most_common_analyst_response
         flipbook_metadata["NumAnalystsMatchedPcr"] = sum([1 if row[f"Analyst{i}"] == row["PCR_verdict"] else 0 for i in range(1, NUM_ANALYSTS + 1)])
 
         if not math.isnan(row["Premutation"]):
@@ -43,13 +44,26 @@ for _, row in df.iterrows():
             elif isinstance(row[key], float):
                 flipbook_metadata[key] = int(row[key])
 
-        flipbook_metadata["EH_matched_PCR"] = "Yes" if row["PCR_verdict"] == row["EH_verdict"] else "No"
         for key in "PCR_verdict", "EH_verdict", "MostCommonAnalystResponse":
             flipbook_metadata[key] = (
                 f"<span style='color: {COLORS.get(flipbook_metadata[key])}; white-space:nowrap'><b>" 
                 f"{flipbook_metadata[key]}"
                 f"</b></span>"
             )
+
+        yes_value = "<i class='check icon'></i> &nbsp; yes"  # "Yes"
+        no_value = "<i class='close icon'></i> &nbsp; no"  # "No"
+        if row["PCR_verdict"] == row["EH_verdict"]:
+            flipbook_metadata["EH_matched_PCR"] = yes_value
+        else:
+            flipbook_metadata["EH_matched_PCR"] = no_value
+
+        if row["PCR_verdict"] == most_common_analyst_response:
+            flipbook_metadata["MostCommonAnalystResponse_matched_PCR"] = yes_value
+        else:
+            print(row["PCR_verdict"], most_common_analyst_response)
+            flipbook_metadata["MostCommonAnalystResponse_matched_PCR"] = no_value
+
         json.dump(flipbook_metadata, f)
         print(f"Wrote {output_path}")
 
