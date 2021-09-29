@@ -5,3 +5,6 @@ cd images
 python3 -m flipbook --generate-static-website -s "Locus (Inheritance)" -s "EH_long" -s "EH_short"
 mv flipbook_html ../docs
 echo "Moved website to docs dir"
+cd ..
+python3 finalize_html.py
+echo "Finalized html"
