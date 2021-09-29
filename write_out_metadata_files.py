@@ -61,7 +61,6 @@ for _, row in df.iterrows():
         if row["PCR_verdict"] == most_common_analyst_response:
             flipbook_metadata["MostCommonAnalystResponse_matched_PCR"] = yes_value
         else:
-            print(row["PCR_verdict"], most_common_analyst_response)
             flipbook_metadata["MostCommonAnalystResponse_matched_PCR"] = no_value
 
         json.dump(flipbook_metadata, f)
