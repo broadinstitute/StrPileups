@@ -18,7 +18,7 @@ for _, row in df.iterrows():
     output_path = f"images/{sample_id}/flipbook_metadata.json"
     with open(output_path, "wt") as f:
         flipbook_metadata = {
-            "Locus_(Inheritance)": "<span style='color: #1133FF; white-space:nowrap'><b>" + row["Locus"] + "</b></span>",
+            "Locus (Inheritance)": "<span style='color: #1133FF; white-space:nowrap'><b>" + row["Locus"] + "</b></span>",
         }
         for key in "Sex", "PCR_verdict", "EH_verdict":
             if row[key]:
